@@ -1,0 +1,77 @@
+<html>
+ 
+<head>
+    <title>Contact Form</title>
+    <style>
+        form {
+            width: 300px;
+            border: 1px solid #eee;
+            padding: 25px;
+        }
+        
+        input,
+        textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        span {
+            margin: 10px 0 0;
+            display: inline-block;
+            font-family: cursive;
+        }
+        
+        input[type=submit] {
+            height: 40px;
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+ 
+<body>
+    <form name="myForm"> <span>Name:</span>
+        <input type="text" name="name" value="Laurence">
+        <br><span>Email:</span>
+        <input type="email" name="email" value="example@example.com">
+        <br><span> Message:</span>
+        <textarea name="message">This is a test message</textarea>
+        <br>
+        <input type="submit" value="Send Message" /> </form>
+    <div class="output"></div>
+    <script>
+    //Add code here :)
+    const url="https://script.google.com/a/macros/optimusinfo.com/s/AKfycbzvmzEncei9fXnlVuLZnLA_KJol8pUDRxbbcCiJzEvhVtaSv0A6/exec";
+    const form = document.forms.namedItem("myForm");
+    console.log(form);
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        createMessage();
+    })
+
+    function createMessage() {
+            console.log("submitted");
+            const formData = new FormData(form);
+            console.log(formData);
+            fetch(url, {
+                method: "POST"
+                , body: formData
+            }).then(function (response) {
+                return response.json()
+            }).then(function (data) {
+                console.log(data);
+                let tempMessage = "";
+                if (data.status === 200) {
+                    tempMessage = "Your email has been received Ticket ID#" + data.value;
+                    form.reset();
+                }
+                else {
+                    tempMessage = "Oooops something went wrong";
+                }
+                document.querySelector(".output").innerHTML = tempMessage;
+            })
+        }
+    </script>
+</body>
+ 
+</html>
